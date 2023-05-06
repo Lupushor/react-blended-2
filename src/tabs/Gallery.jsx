@@ -48,14 +48,45 @@ export class Gallery extends Component {
   };
 
   onHandleSubmit = value => {
-    console.log(value);
+    this.setState({
+      query: value,
+      page: 1,
+      images: [],
+      error: null,
+      isEmpty: false,
+    });
+  };
+
+  onLoadMore = () => {
+    this.setState(prev => ({ page: prev.page + 1 }));
   };
 
   render() {
+    const { images, isLoading, isEmpty, isVisible, error } = this.state;
     return (
       <>
-        <Text textAlign="center">Sorry. There are no images ... 😭</Text>
         <SearchForm onSubmit={this.onHandleSubmit} />
+        {isEmpty && (
+          <Text textAlign="center">Sorry. There are no images ... 😭</Text>
+        )}
+        {error && (
+          <Text textAlign="center">❌ Something went wrong - {error}</Text>
+        )}
+        <Grid>
+          {images.length > 0 &&
+            images.map(({ alt, id, src, avg_color }) => (
+              <GridItem key={id}>
+                <CardItem color={avg_color}>
+                  <img src={src.large} alt={alt} />
+                </CardItem>
+              </GridItem>
+            ))}
+        </Grid>
+        {isVisible && (
+          <Button onClick={this.onLoadMore} disabled={isLoading}>
+            {isLoading ? 'Loading...' : 'Load More'}
+          </Button>
+        )}
       </>
     );
   }

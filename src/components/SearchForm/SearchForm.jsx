@@ -21,7 +21,7 @@ export class SearchForm extends Component {
   render() {
     const { query } = this.state;
     return (
-      <SearchFormStyled>
+      <SearchFormStyled onSubmit={this.handelSubmit}>
         <FormBtn type="submit">
           <FiSearch size="16px" />
         </FormBtn>
